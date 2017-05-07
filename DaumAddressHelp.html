@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>주소 검색</title>
+
+	    <!--autoload=false 파라미터를 이용하여 자동으로 로딩되는 것을 막습니다.-->
+	    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
+
+	    <script>
+            function showWindow(input) {
+                //load함수를 이용하여 core스크립트의 로딩이 완료된 후, 우편번호 서비스를 실행합니다.
+                daum.postcode.load(function () {
+                    new daum.Postcode({
+                        oncomplete: function (data) {
+                            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                            window.external.SetAddressInfo(data.roadAddress);
+                        },
+                        onclose: function (state) {
+                            //state는 우편번호 찾기 화면이 어떻게 닫혔는지에 대한 상태 변수 이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
+                            if (state === 'FORCE_CLOSE') {
+                                //사용자가 브라우저 닫기 버튼을 통해 팝업창을 닫았을 경우, 실행될 코드를 작성하는 부분입니다.
+                                window.external.Cancel();
+                            } else if (state === 'COMPLETE_CLOSE') {
+                                //사용자가 검색결과를 선택하여 팝업창이 닫혔을 경우, 실행될 코드를 작성하는 부분입니다.
+                                //oncomplete 콜백 함수가 실행 완료된 후에 실행됩니다.
+                            }
+                        }
+                    }).open({
+                        q: input, popupName: 'DaumAddressHelp'
+                    });
+                });
+            }
+        </script>
+    </head>
+
+    <body>
+    </body>
+</html>
